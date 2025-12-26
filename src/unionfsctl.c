@@ -44,25 +44,27 @@ int main(int argc, char **argv) {
 
 	int opt;
 	const char* argument_param;
+	char debug_file[PATHLEN_MAX] = {0};
 	int debug_on_off;
 	int ioctl_res;
 	while ((opt = getopt(argc, argv, "d:p:")) != -1) {
 		switch (opt) {
 		case 'p':
-			argument_param = optarg;
-			if (strlen(argument_param) < 1) {
+			if (strlen(optarg) < 1) {
 				fprintf(stderr,
 					"Not a valid debug path given!\n");
 				print_help(progname);
 				exit(1);
 			}
 
-			if (strlen(argument_param) > PATHLEN_MAX) {
+			if (strlen(optarg) > PATHLEN_MAX) {
 				fprintf(stderr, "Debug path too long!\n");
 				exit(1);
 			}
 
-			ioctl_res = ioctl(fd, UNIONFS_SET_DEBUG_FILE, argument_param);
+			strncpy(debug_file, optarg, PATHLEN_MAX - 1);
+
+			ioctl_res = ioctl(fd, UNIONFS_SET_DEBUG_FILE, debug_file);
 			if (ioctl_res == -1) {
 				fprintf(stderr, "debug-file ioctl failed: %s\n",
 					strerror(errno) );
