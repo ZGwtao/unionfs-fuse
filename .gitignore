@@ -3,6 +3,8 @@ unionfs.log
 unionfs
 unionfsctl
 libunionfs.so
+fuse-*
+demo-space
 
 # gcov (coverage)
 coverage
